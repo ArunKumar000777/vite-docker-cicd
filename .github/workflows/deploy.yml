@@ -1,12 +1,12 @@
-name: Build Vite App
+name: Build and Deploy Vite App Locally
 
 on:
     push:
         branches: [main]
 
 jobs:
-    build:
-        runs-on: ubuntu-latest # or 'self-hosted' if you're running it locally
+    build-deploy:
+        runs-on: self-hosted
 
         steps:
             - name: Checkout code
@@ -23,8 +23,13 @@ jobs:
             - name: Build Vite app
               run: npm run build
 
-            - name: Upload built files
-              uses: actions/upload-artifact@v4
-              with:
-                  name: vite-dist
-                  path: dist/
+            - name: Build Docker image
+              run: docker build -t vite-apache .
+
+            - name: Stop old container (if any)
+              run: |
+                  docker stop vite-app || true
+                  docker rm vite-app || true
+
+            - name: Start new Docker container
+              run: docker run -d -p 8080:80 --name vite-app vite-apache
