@@ -28,7 +28,7 @@ function App() {
 
     return (
         <div>
-            <h1>Todo list</h1>
+            <h1>Todo list app created by arun</h1>
             <form onSubmit={(e) => addTodo(e)}>
                 <input type="text" placeholder="enter a task" value={todo} onChange={(e) => setTodo(e.target.value)} />
                 <button type="submit">add</button>
