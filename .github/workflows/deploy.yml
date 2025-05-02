@@ -28,8 +28,12 @@ jobs:
 
             - name: Stop old container (if any)
               run: |
-                  docker stop vite-app -ErrorAction SilentlyContinue
-                  docker rm vite-app -ErrorAction SilentlyContinue
+                  if (docker ps -q -f name=vite-app) {
+                    docker stop vite-app
+                                    }
+                      if (docker ps -a -q -f name=vite-app) {
+                      docker rm vite-app
+                    }
 
             - name: Start new Docker container
               run: docker run -d -p 8080:80 --name vite-app vite-apache
